@@ -23,6 +23,12 @@ node_modules/
 *.sw[po]
 
 
+# Tup
+######
+
+.tup
+
+
 # OS generated files
 ######################
 

@@ -8094,64 +8094,58 @@ var _evancz$elm_http$Http$post = F3(
 			A2(_evancz$elm_http$Http$send, _evancz$elm_http$Http$defaultSettings, request));
 	});
 
-var _user$project$Main$subscriptions = function (model) {
+var _user$elm_flickr_photo_gallery_demo$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
-var _user$project$Main$viewThumbnail = function (_p0) {
-	var _p1 = _p0;
-	return A2(
-		_elm_lang$html$Html$li,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$img,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$src(_p1.thumbnailUrl)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[]))
-			]));
-};
-var _user$project$Main$view = function (_p2) {
-	var _p3 = _p2;
-	return A2(
-		_elm_lang$html$Html$ol,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		A2(_elm_lang$core$List$map, _user$project$Main$viewThumbnail, _p3.photos));
-};
-var _user$project$Main$update = F2(
+var _user$elm_flickr_photo_gallery_demo$Main$update = F2(
 	function (msg, model) {
-		var _p4 = msg;
-		if (_p4.ctor === 'FetchSucceed') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{photos: _p4._0}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'FetchSucceed':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{photos: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'FetchFail':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'SelectPhoto':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							selectedId: _elm_lang$core$Maybe$Just(_p0._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{selectedId: _elm_lang$core$Maybe$Nothing}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
-var _user$project$Main_ops = _user$project$Main_ops || {};
-_user$project$Main_ops['=>'] = F2(
+var _user$elm_flickr_photo_gallery_demo$Main_ops = _user$elm_flickr_photo_gallery_demo$Main_ops || {};
+_user$elm_flickr_photo_gallery_demo$Main_ops['=>'] = F2(
 	function (v0, v1) {
 		return {ctor: '_Tuple2', _0: v0, _1: v1};
 	});
-var _user$project$Main$Photo = F3(
+var _user$elm_flickr_photo_gallery_demo$Main$Photo = F3(
 	function (a, b, c) {
 		return {id: a, title: b, thumbnailUrl: c};
 	});
-var _user$project$Main$photosDecoder = function () {
-	var decodePhoto = A3(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'url_s',
+var _user$elm_flickr_photo_gallery_demo$Main$photosDecoder = function () {
+	var decodePhoto = A4(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+		'url_q',
 		_elm_lang$core$Json_Decode$string,
+		'',
 		A4(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
 			'title',
@@ -8161,59 +8155,138 @@ var _user$project$Main$photosDecoder = function () {
 				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 				'id',
 				_elm_lang$core$Json_Decode$string,
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Main$Photo))));
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$elm_flickr_photo_gallery_demo$Main$Photo))));
 	return A2(
 		_elm_lang$core$Json_Decode$at,
 		_elm_lang$core$Native_List.fromArray(
 			['photos', 'photo']),
 		_elm_lang$core$Json_Decode$list(decodePhoto));
 }();
-var _user$project$Main$Model = F2(
+var _user$elm_flickr_photo_gallery_demo$Main$Model = F2(
 	function (a, b) {
 		return {photos: a, selectedId: b};
 	});
-var _user$project$Main$FetchFail = function (a) {
+var _user$elm_flickr_photo_gallery_demo$Main$DeselectPhoto = {ctor: 'DeselectPhoto'};
+var _user$elm_flickr_photo_gallery_demo$Main$SelectPhoto = function (a) {
+	return {ctor: 'SelectPhoto', _0: a};
+};
+var _user$elm_flickr_photo_gallery_demo$Main$viewThumbnail = function (_p1) {
+	var _p2 = _p1;
+	var _p3 = _p2.id;
+	return A2(
+		_elm_lang$html$Html$li,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'lineHeight', '0')
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$a,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$href(
+						A2(_elm_lang$core$Basics_ops['++'], '#', _p3)),
+						A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'button'),
+						_elm_lang$html$Html_Events$onClick(
+						_user$elm_flickr_photo_gallery_demo$Main$SelectPhoto(_p3)),
+						_elm_lang$html$Html_Attributes$style(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'display', 'block')
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$img,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$src(_p2.thumbnailUrl),
+								_elm_lang$html$Html_Attributes$height(150),
+								_elm_lang$html$Html_Attributes$width(150),
+								_elm_lang$html$Html_Attributes$style(
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'padding', '0.5em'),
+										A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'height', '100%'),
+										A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'width', '100%'),
+										A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'border', 'none'),
+										A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'objectFit', 'contain')
+									]))
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+					]))
+			]));
+};
+var _user$elm_flickr_photo_gallery_demo$Main$view = function (_p4) {
+	var _p5 = _p4;
+	return A2(
+		_elm_lang$html$Html$ol,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'display', 'flex'),
+						A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'flexFlow', 'row wrap'),
+						A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'justifyContent', 'space-between'),
+						A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'alignItems', 'center'),
+						A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'listStyle', 'none')
+					]))
+			]),
+		A2(_elm_lang$core$List$map, _user$elm_flickr_photo_gallery_demo$Main$viewThumbnail, _p5.photos));
+};
+var _user$elm_flickr_photo_gallery_demo$Main$FetchFail = function (a) {
 	return {ctor: 'FetchFail', _0: a};
 };
-var _user$project$Main$FetchSucceed = function (a) {
+var _user$elm_flickr_photo_gallery_demo$Main$FetchSucceed = function (a) {
 	return {ctor: 'FetchSucceed', _0: a};
 };
-var _user$project$Main$flickrGetPhotos = function () {
+var _user$elm_flickr_photo_gallery_demo$Main$flickrGetPhotos = function () {
 	var url = A2(
 		_evancz$elm_http$Http$url,
 		'https://api.flickr.com/services/rest/',
 		_elm_lang$core$Native_List.fromArray(
 			[
-				A2(_user$project$Main_ops['=>'], 'api_key', 'edd9657c0af38e133a0416cc1815dac7'),
-				A2(_user$project$Main_ops['=>'], 'user_id', '37993285@N06'),
-				A2(_user$project$Main_ops['=>'], 'safe_search', '2'),
-				A2(_user$project$Main_ops['=>'], 'content_type', '1'),
-				A2(_user$project$Main_ops['=>'], 'privacy_filter', '1'),
-				A2(_user$project$Main_ops['=>'], 'per_page', '500'),
-				A2(_user$project$Main_ops['=>'], 'extra', 'url_s')
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'api_key', 'edd9657c0af38e133a0416cc1815dac7'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'method', 'flickr.people.getPhotos'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'format', 'json'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'nojsoncallback', '1'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'user_id', '37993285@N06'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'safe_search', '2'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'content_type', '1'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'privacy_filter', '1'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'per_page', '500'),
+				A2(_user$elm_flickr_photo_gallery_demo$Main_ops['=>'], 'extras', 'url_q')
 			]));
 	return A3(
 		_elm_lang$core$Task$perform,
-		_user$project$Main$FetchFail,
-		_user$project$Main$FetchSucceed,
-		A2(_evancz$elm_http$Http$get, _user$project$Main$photosDecoder, url));
+		_user$elm_flickr_photo_gallery_demo$Main$FetchFail,
+		_user$elm_flickr_photo_gallery_demo$Main$FetchSucceed,
+		A2(_evancz$elm_http$Http$get, _user$elm_flickr_photo_gallery_demo$Main$photosDecoder, url));
 }();
-var _user$project$Main$init = function () {
+var _user$elm_flickr_photo_gallery_demo$Main$init = function () {
 	var model = {
 		photos: _elm_lang$core$Native_List.fromArray(
 			[]),
 		selectedId: _elm_lang$core$Maybe$Nothing
 	};
-	return {ctor: '_Tuple2', _0: model, _1: _user$project$Main$flickrGetPhotos};
+	return {ctor: '_Tuple2', _0: model, _1: _user$elm_flickr_photo_gallery_demo$Main$flickrGetPhotos};
 }();
-var _user$project$Main$main = {
+var _user$elm_flickr_photo_gallery_demo$Main$main = {
 	main: _elm_lang$html$Html_App$program(
-		{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})
+		{init: _user$elm_flickr_photo_gallery_demo$Main$init, view: _user$elm_flickr_photo_gallery_demo$Main$view, update: _user$elm_flickr_photo_gallery_demo$Main$update, subscriptions: _user$elm_flickr_photo_gallery_demo$Main$subscriptions})
 };
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$project$Main$main === 'undefined' ? null : _user$project$Main$main);
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Main'], 'Main', typeof _user$elm_flickr_photo_gallery_demo$Main$main === 'undefined' ? null : _user$elm_flickr_photo_gallery_demo$Main$main);
 
 if (typeof define === "function" && define['amd'])
 {

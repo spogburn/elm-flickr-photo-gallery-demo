@@ -1,0 +1,55 @@
+SRC_DIR = $(TUP_CWD)/src
+PUG_DIR = $(SRC_DIR)/pug
+ELM_DIR = $(SRC_DIR)/elm
+SASS_DIR = $(SRC_DIR)/sass
+DIST_DIR = $(TUP_CWD)/dist
+JS_DIR = $(DIST_DIR)/js
+CSS_DIR = $(DIST_DIR)/css
+
+SASSC_FLAGS = --style compressed
+SASSC_FLAGS += --precision 10
+
+POSTCSS_FLAGS = --use autoprefixer
+POSTCSS_FLAGS += --autoprefixer.remove false
+POSTCSS_FLAGS += --autoprefixer.browsers "last 1 version, > 2%, Firefox ESR, ChromeAndroid >= 4.4"
+
+ZOPFLI_FLAGS = --gzip
+ZOPFLI_FLAGS += --i10
+
+BROTLI_FLAGS = --quality 10
+
+
+# Macros
+!zopfli = |> zopfli $(ZOPFLI_FLAGS) %f |> %f.gz
+!brotli = |> bro $(BROTLI_FLAGS) --input %f --output %o && chmod 644 %o |> %f.br
+
+
+# Pug
+:$(PUG_DIR)/index.pug |> pug %f --out $(DIST_DIR) |> $(DIST_DIR)/index.html
+
+
+# Elm
+#:$(ELM_DIR)/Main.elm |> elm-make %f --output %o |> $(JS_DIR)/%B.js
+
+
+# Sass
+:$(SASS_DIR)/main.sass |> sassc $(SASSC_FLAGS) %f | postcss $(POSTCSS_FLAGS) --output %o |> $(CSS_DIR)/main.css
+
+
+# Pre-compression for production
+
+ifeq (@(BUILD_TYPE),production)
+
+# Zopfli
+:foreach $(DIST_DIR)/*.html |> !zopfli |>
+:foreach $(CSS_DIR)/*.js |> !zopfli |>
+:foreach $(CSS_DIR)/*.css |> !zopfli |>
+
+
+# Brotli
+:foreach $(DIST_DIR)/*.html |> !brotli |>
+:foreach $(CSS_DIR)/*.js |> !brotli |>
+:foreach $(CSS_DIR)/*.css |> !brotli |>
+
+endif
+

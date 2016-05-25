@@ -1,0 +1,27 @@
+{
+  "name": "elm-flickr-photo-gallery-demo",
+  "version": "1.0.0",
+  "description": "Elm Flicker Photo Gallery Demo",
+  "main": "index.js",
+  "dependencies": {
+    "autoprefixer": "^6.3.6",
+    "elm": "^0.17.0",
+    "postcss-cli": "^2.5.2",
+    "pug": "^2.0.0-alpha8",
+    "pug-cli": "^1.0.0-alpha5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toastal/elm-flickr-photo-gallery-demo.git"
+  },
+  "author": "Kyle J. Kress",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/toastal/elm-flickr-photo-gallery-demo/issues"
+  },
+  "homepage": "https://github.com/toastal/elm-flickr-photo-gallery-demo#readme"
+}
