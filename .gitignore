@@ -29,6 +29,12 @@ node_modules/
 .tup
 
 
+# Dist
+#######
+
+/dist
+
+
 # OS generated files
 ######################
 

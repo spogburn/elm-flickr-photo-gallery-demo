@@ -114,8 +114,10 @@ view { photos, selectedId } =
         [ style
             [ "display" => "flex"
             , "flexFlow" => "row wrap"
-            , "justifyContent" => "space-between"
+            , "justifyContent" => "center"
             , "alignItems" => "center"
+            , "margin" => "0"
+            , "padding" => "0"
             , "listStyle" => "none"
             ]
         ]
