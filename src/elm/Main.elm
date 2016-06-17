@@ -2,10 +2,10 @@ module Main exposing (..)
 
 import Html exposing (Html, a, div, img, li, ol, text)
 import Html.App as Html
-import Html.Attributes exposing (attribute, height, href, src, style, width)
+import Html.Attributes exposing (attribute, height, href, src, style, type', width)
 import Html.Events exposing (onClick)
 import Http
-import Json.Decode as Decoder
+import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)
 import Task
 
@@ -110,18 +110,28 @@ viewThumbnail { id, thumbnailUrl } =
 
 view : Model -> Html Msg
 view { photos, selectedId } =
-    ol
-        [ style
-            [ "display" => "flex"
-            , "flexFlow" => "row wrap"
-            , "justifyContent" => "center"
-            , "alignItems" => "center"
-            , "margin" => "0"
-            , "padding" => "0"
-            , "listStyle" => "none"
+    div []
+        [ Html.node "style"
+            [ type' "text/css" ]
+            [ text """
+                html, body { margin: 0, padding: 0 }
+                html { box-sizing: border-box }
+                *, *::before, *::after { box-sizing: inherit }
+            """
             ]
+        , ol
+            [ style
+                [ "display" => "flex"
+                , "flexFlow" => "row wrap"
+                , "justifyContent" => "center"
+                , "alignItems" => "center"
+                , "margin" => "0"
+                , "padding" => "0"
+                , "listStyle" => "none"
+                ]
+            ]
+            <| List.map viewThumbnail photos
         ]
-        <| List.map viewThumbnail photos
 
 
 subscriptions : Model -> Sub Msg
@@ -129,6 +139,7 @@ subscriptions model =
     Sub.none
 
 
+flickrGetPhotos : Cmd Msg
 flickrGetPhotos =
     let
         url =
@@ -149,13 +160,14 @@ flickrGetPhotos =
         Task.perform FetchFail FetchSucceed <| Http.get photosDecoder url
 
 
+photosDecoder : Decoder (List Photo)
 photosDecoder =
     let
         decodePhoto =
             decode Photo
-                |> required "id" Decoder.string
-                |> optional "title" Decoder.string ""
-                |> optional "url_q" Decoder.string ""
+                |> required "id" Decode.string
+                |> optional "title" Decode.string ""
+                |> optional "url_q" Decode.string ""
     in
-        Decoder.at [ "photos", "photo" ]
-            <| Decoder.list decodePhoto
+        Decode.at [ "photos", "photo" ]
+            <| Decode.list decodePhoto
